@@ -2,8 +2,10 @@ using MediatR;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Ambev.DeveloperEvaluation.WebApi.Common;
+using Ambev.DeveloperEvaluation.Application.Products.GetProducts;
 using Ambev.DeveloperEvaluation.Application.Products.CreateProduct;
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.CreateProduct;
+using Ambev.DeveloperEvaluation.WebApi.Features.Products.Common;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Products;
 
@@ -28,6 +30,24 @@ public class ProductsController : BaseController
     }
 
     /// <summary>
+    /// Retrieves all products
+    /// </summary>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>The list of all products</returns>
+    [HttpGet]
+    public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new GetProductsQuery(), cancellationToken);
+
+        return Ok(new ApiResponseWithData<List<ProductResponse>>
+        {
+            Success = true,
+            Message = "Products retrieved successfully",
+            Data = _mapper.Map<List<ProductResponse>>(response)
+        });
+    }
+
+    /// <summary>
     /// Create a new product
     /// </summary>
     /// <param name="request">The product creation request</param>
@@ -38,11 +58,11 @@ public class ProductsController : BaseController
         var command = _mapper.Map<CreateProductCommand>(request);
         var response = await _mediator.Send(command);
 
-        return Created(string.Empty, new ApiResponseWithData<CreateProductResponse>
+        return Created(string.Empty, new ApiResponseWithData<ProductResponse>
         {
             Success = true,
             Message = "Product created successfully",
-            Data = _mapper.Map<CreateProductResponse>(response)
+            Data = _mapper.Map<ProductResponse>(response)
         });
     }
 }

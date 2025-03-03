@@ -1,4 +1,5 @@
 using MediatR;
+using Ambev.DeveloperEvaluation.Application.Products.Common;
 
 namespace Ambev.DeveloperEvaluation.Application.Products.CreateProduct;
 
@@ -22,4 +23,4 @@ public record CreateProductCommand(
     string Description,
     string Category,
     string Image
-): IRequest<CreateProductResult>{}
+): IRequest<ProductResult>{}
