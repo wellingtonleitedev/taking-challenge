@@ -8,6 +8,13 @@ namespace Ambev.DeveloperEvaluation.Domain.Repositories;
 public interface IProductRepository
 {
     /// <summary>
+    /// Retrieves all products
+    /// </summary>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>The list of all products</returns>
+    Task<List<Product>> GetAllAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Creates a new product in the repository
     /// </summary>
     /// <param name="product">The product to create</param>
