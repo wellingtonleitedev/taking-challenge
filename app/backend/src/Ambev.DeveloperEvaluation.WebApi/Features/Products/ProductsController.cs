@@ -2,8 +2,10 @@ using MediatR;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Ambev.DeveloperEvaluation.WebApi.Common;
+using Ambev.DeveloperEvaluation.Application.Products.GetProducts;
 using Ambev.DeveloperEvaluation.Application.Products.CreateProduct;
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.CreateProduct;
+using Ambev.DeveloperEvaluation.WebApi.Features.Products.Common;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Products;
 
@@ -25,6 +27,24 @@ public class ProductsController : BaseController
     {
         _mapper = mapper;
         _mediator = mediator;
+    }
+
+    /// <summary>
+    /// Retrieves all products
+    /// </summary>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>The list of all products</returns>
+    [HttpGet]
+    public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new GetProductsQuery(), cancellationToken);
+
+        return Ok(new ApiResponseWithData<List<ProductResponse>>
+        {
+            Success = true,
+            Message = "Products retrieved successfully",
+            Data = _mapper.Map<List<ProductResponse>>(response)
+        });
     }
 
     /// <summary>
