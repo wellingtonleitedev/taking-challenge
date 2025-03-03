@@ -2,18 +2,17 @@ using MediatR;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Ambev.DeveloperEvaluation.WebApi.Common;
+using Ambev.DeveloperEvaluation.WebApi.Features.Products.Common;
+using Ambev.DeveloperEvaluation.Application.Products.GetProduct;
 using Ambev.DeveloperEvaluation.Application.Products.GetProducts;
 using Ambev.DeveloperEvaluation.Application.Products.CreateProduct;
 using Ambev.DeveloperEvaluation.WebApi.Features.Products.CreateProduct;
-using Ambev.DeveloperEvaluation.WebApi.Features.Products.Common;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Products;
 
 /// <summary>
 /// Controller for managing product operations
 /// </summary>
-[ApiController]
-[Route("api/[controller]")]
 public class ProductsController : BaseController
 {
     private readonly IMapper _mapper;
@@ -44,6 +43,25 @@ public class ProductsController : BaseController
             Success = true,
             Message = "Products retrieved successfully",
             Data = _mapper.Map<List<ProductResponse>>(response)
+        });
+    }
+
+    /// <summary>
+    /// Retrieves a product by their ID
+    /// </summary>
+    /// <param name="id">The unique identifier of the product</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>The product details if found</returns>
+    [HttpGet]
+    public async Task<IActionResult> Get(Guid id, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new GetProductQuery(id), cancellationToken);
+
+        return Ok(new ApiResponseWithData<ProductResponse>
+        {
+            Success = true,
+            Message = "Product retrieved successfully",
+            Data = _mapper.Map<ProductResponse>(response)
         });
     }
 
