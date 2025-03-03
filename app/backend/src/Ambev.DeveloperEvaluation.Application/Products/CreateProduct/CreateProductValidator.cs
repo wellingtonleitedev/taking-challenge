@@ -3,7 +3,7 @@
 namespace Ambev.DeveloperEvaluation.Application.Products.CreateProduct;
 
 /// <summary>
-/// Validator for CreateProductCommand that defines validation rules for user creation command.
+/// Validator for CreateProductCommand that defines validation rules for product creation command.
 /// </summary>
 public class CreateProductCommandValidator : AbstractValidator<CreateProductCommand>
 {

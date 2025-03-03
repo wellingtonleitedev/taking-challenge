@@ -58,11 +58,11 @@ public class ProductsController : BaseController
         var command = _mapper.Map<CreateProductCommand>(request);
         var response = await _mediator.Send(command);
 
-        return Created(string.Empty, new ApiResponseWithData<CreateProductResponse>
+        return Created(string.Empty, new ApiResponseWithData<ProductResponse>
         {
             Success = true,
             Message = "Product created successfully",
-            Data = _mapper.Map<CreateProductResponse>(response)
+            Data = _mapper.Map<ProductResponse>(response)
         });
     }
 }
